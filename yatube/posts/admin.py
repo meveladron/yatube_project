@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Group, Post
+
+from .models import Group, Post, Comment, Follow
 
 
+@admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     list_display = (
         'title',
@@ -13,9 +15,11 @@ class GroupAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+@admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
+        'title',
         'text',
         'pub_date',
         'author',
@@ -27,5 +31,31 @@ class PostAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-admin.site.register(Group, GroupAdmin)
-admin.site.register(Post, PostAdmin)
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk',
+        'post',
+        'author',
+        'text',
+        'created'
+    )
+
+    list_editable = ('author',)
+    list_filter = ('author',)
+    list_per_page = 10
+    search_fields = ('text',)
+
+
+@admin.register(Follow)
+class FollowAdmin(admin.ModelAdmin):
+    list_display = (
+        'pk',
+        'user',
+        'author'
+    )
+    list_filter = ('author',)
+    search_fields = (
+        'author',
+        'user'
+    )
